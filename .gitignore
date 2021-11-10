@@ -1,7 +1,3 @@
-# Project exclude paths
-/node_modules/
-
-
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,intellij
 
@@ -281,3 +277,6 @@ dmypy.json
 cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,python,intellij
+/.serverless/
+/node_modules/
+/.idea/
