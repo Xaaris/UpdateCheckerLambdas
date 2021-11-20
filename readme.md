@@ -35,3 +35,10 @@ sls remove
 ```
 
 
+### Secrets
+Secrets have been stored in AWS via AWS SSM parameter store: https://www.serverless.com/blog/aws-secrets-management/
+
+### Install python certificates
+Can't send mails because you installed python via brew and now it's complaining about certificates?
+Just run some `shadystufftoinstallcertificates.py`.
+

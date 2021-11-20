@@ -1,10 +1,10 @@
-import json
 from typing import Optional
 
 import requests
 
 from src.common.Product import Product
-from src.common.ProductRepository import get_product
+from src.common.ProductRepository import get_product, update_product
+from src.functions.mail.mail import send_update_info_mail
 
 
 def go(event, context):
@@ -13,20 +13,14 @@ def go(event, context):
     remote = get_remote_ikea_version()
 
     if is_remote_version_higher(local, remote):
-        msg = f"There is an update from {local.major_version}.{local.minor_version}.{local.hotfix_version} to {remote.major_version}.{remote.minor_version}.{remote.hotfix_version} available! " \
-              f"You can find the release notes here: {remote.release_notes_link}"
+        print(f"Update available for {local.id} from {local.get_full_version()} to {remote.get_full_version()}")
+        send_update_info_mail("xaaris+updatecheckertest@googlemail.com", remote.name, local.get_full_version(),
+                              remote.get_full_version(), remote.release_notes_link)
+        update_product(remote)
     else:
-        msg = f"Your local version of {local.major_version}.{local.minor_version}.{local.hotfix_version} is up to date"
+        print(f"Your local version for {local.name} of {local.get_full_version()} is up to date")
 
-    print(msg)
-    response_body = {
-        "message": msg,
-        "input": event,
-    }
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(response_body)
-    }
+    response = {"statusCode": 200}
     return response
 
 
@@ -46,6 +40,7 @@ def get_remote_ikea_version() -> Optional[Product]:
             release_notes_link = info["fw_weblink_relnote"]
 
             result = Product("ikea",
+                             "IKEA Tradfri Gateway",
                              remote_major_version,
                              remote_minor_version,
                              remote_hotfix_version,
